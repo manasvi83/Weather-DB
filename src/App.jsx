@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import getFormattedWeatherData from "./ApiService/WeatherService.js";
 import Forecast from "./components/Forecast.jsx";
 import Inputs from "./components/Inputs.jsx";
@@ -12,16 +12,27 @@ const App = () => {
   const [units, setUnits] = useState('metric')
   const [weather, setWeather] = useState(null)
 
-  const getWeather = async () => {
+  // const getWeather = async () => {
+  //   await getFormattedWeatherData({ ...query, units }).then(data => {
+  //     setWeather(data);
+  //   })
+  //   // console.log(data);
+  // };
+
+  // useEffect(() => {
+  //   getWeather();
+  // }, [query, units])
+
+  const getWeather = useCallback(async () => {
     await getFormattedWeatherData({ ...query, units }).then(data => {
       setWeather(data);
-    })
+    });
     // console.log(data);
-  };
+  }, [query, units]);
 
   useEffect(() => {
     getWeather();
-  }, [query, units])
+  }, [getWeather]);
 
 
   return (
